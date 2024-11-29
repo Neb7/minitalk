@@ -13,31 +13,29 @@
 #include "minitalk.h"
 
 /*
- La structure sigaction est définie par quelque chose comme :
+The sigaction structure is defined by something like:
 
 struct sigaction {
-    void     (*sa_handler) (int);
-    void     (*sa_sigaction) (int, siginfo_t *, void *);
-    sigset_t   sa_mask;
-    int        sa_flags;
-    void     (*sa_restorer) (void);
+    void   (*sa_handler) (int);
+    void   (*sa_sigaction) (int, siginfo_t *, void *);
+    sigset_t sa_mask;
+    int sa_flags;
+    void   (*sa_restorer) (void);
 };
 
-option :
-SA_SIGINFO : Permet d'utiliser la fonction sa_sigaction au lieu de sa_handler.
-Cela donne accès à des informations supplémentaires sur le signal, via une
-structure siginfo_t (dont on se sert pour acceder au PID du client).
-SA_RESTART : Rétablit automatiquement les appels système interrompus par
-ce signal.
-SA_NODEFER : Empêche que le signal traité soit bloqué automatiquement pendant
-l'exécution du gestionnaire.
+option:
+SA_SIGINFO: Allows the use of sa_sigaction instead of sa_handler. This provides
+access to additional information on the signal, via a siginfo_t structure (used
+to access the client PID).
+SA_RESTART: Automatically restores system calls interrupted by this signal.
+SA_NODEFER: Prevents the processed signal from being blocked automatically 
+during the execution of the handler.
 
-int sigemptyset(sigset_t *set); vide set de tout signaux pour ne bloquer
-aucun signal
+int sigemptyset(sigset_t *set); empty set of all signals to not block any signal
 
-sigaction(le signal, pointeur vers structure sigaction, pointeur pour stocker)
-sigaction sert a modifier l'action a effectuer lors de la reception d'un signal
-specifique
+sigaction(the signal, pointer to sigaction structure, pointer to store)
+sigaction is used to modify the action to be performed when receiving a specific
+signal
 */
 void	ft_init_sig(int sig, void (*ft_ges)(int, siginfo_t *, void *))
 {

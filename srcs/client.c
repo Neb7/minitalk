@@ -6,7 +6,7 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 14:05:53 by benpicar          #+#    #+#             */
-/*   Updated: 2024/11/27 12:57:14 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/11/27 16:12:52 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	ft_envoi_str(char *str, int pid);
 static void	ft_envoi_char(char c, int pid);
 static void	ft_error(int pid);
 
-/*Variable global autorise pour check la reception du bit*/
+/*Variable global authorize pour check la reception du bit*/
 volatile int	g_control_bit;
 
 int	main(int ac, char **av)
@@ -37,7 +37,7 @@ int	main(int ac, char **av)
 	return (0);
 }
 
-/*Gestion des signal pour les client*/
+/*Signal management for customers*/
 static void	ft_ges_user(int sig, siginfo_t *info, void *context)
 {
 	if (sig == SIGUSR1)
@@ -51,7 +51,7 @@ static void	ft_ges_user(int sig, siginfo_t *info, void *context)
 	(void)context;
 }
 
-/*Envoie de la chaine vers le server*/
+/*Send the string to the server*/
 static void	ft_envoi_str(char *str, int pid)
 {
 	int	i;
@@ -65,7 +65,7 @@ static void	ft_envoi_str(char *str, int pid)
 	ft_envoi_char(str[i], pid);
 }
 
-/*Envoie d'un caractere vers le server*/
+/*Sends a character to the server*/
 static void	ft_envoi_char(char c, int pid)
 {
 	int	bit;
@@ -84,11 +84,11 @@ static void	ft_envoi_char(char c, int pid)
 				ft_error(pid);
 		bit--;
 		while (g_control_bit != 1)
-			pause();
+			usleep(10);
 	}
 }
 
-/*Erreur pour un mauvais PID*/
+/*Error for a wrong PID*/
 static void	ft_error(int pid)
 {
 	ft_fprintf(2, "Wrong PID : %d\n", pid);

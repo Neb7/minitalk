@@ -6,14 +6,14 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:36:32 by benpicar          #+#    #+#             */
-/*   Updated: 2024/11/27 12:52:48 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/11/28 10:56:44 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
 static void	ft_ges(int sig, siginfo_t *info, void *context);
-static void	ft_write_str(t_vector **vec);
+static void	ft_write_str(t_vector **vec, siginfo_t *info);
 
 int	main(int ac, char **av)
 {
@@ -31,9 +31,9 @@ int	main(int ac, char **av)
 	return (0);
 }
 
-/*Si le signal est SIGUSR1 lebit est 1 et si le signql est SIGUSR2 le bit est
-de 2 pour la reception, envoie SIGUSR1 pour confirmer la recption du caractere
-et SIGUSR2 pour confirmer la reception et la reception du message*/
+/*If the signal is SIGUSR1 the bit is 1 and if the signql is SIGUSR2 the bit is
+2 for reception, sends SIGUSR1 to confirm the character acceptance and SIGUSR2
+to confirm the message receipt and reception*/
 static void	ft_ges(int sig, siginfo_t *info, void *context)
 {
 	static char		c = 0;
@@ -55,7 +55,7 @@ static void	ft_ges(int sig, siginfo_t *info, void *context)
 			return (ft_free_vector(&vec), exit(EXIT_FAILURE));
 	if (bit == 0 && c == 0)
 	{
-		ft_write_str(&vec);
+		ft_write_str(&vec, info);
 		kill(info->si_pid, SIGUSR2);
 	}
 	bit--;
@@ -63,10 +63,12 @@ static void	ft_ges(int sig, siginfo_t *info, void *context)
 	(void)context;
 }
 
-/*Affiche le message une fois entierrement receptionner*/
-static void	ft_write_str(t_vector **vec)
+/*Displays the message once fully received*/
+static void	ft_write_str(t_vector **vec, siginfo_t *info)
 {
 	write(1, (*vec)->buf, (*vec)->index);
 	ft_free_vector(vec);
-	write(1, "\n", 1);
+	write(1, "\n\033[3;92m", 8);
+	ft_fprintf(1, "Message received from PID : %d", info->si_pid);
+	write(1, "\033[0m\n", 5);
 }
