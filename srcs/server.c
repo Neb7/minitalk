@@ -6,7 +6,7 @@
 /*   By: benpicar <benpicar@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:36:32 by benpicar          #+#    #+#             */
-/*   Updated: 2024/11/28 10:56:44 by benpicar         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:41:59 by benpicar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	ft_ges(int sig, siginfo_t *info, void *context)
 	static t_vector	*vec = NULL;
 
 	if (!vec)
-		vec = ft_new_vector();
+		vec = ft_new_vector(sizeof (char));
 	if (!vec)
 		exit(EXIT_FAILURE);
 	if (bit < 0)
@@ -51,7 +51,7 @@ static void	ft_ges(int sig, siginfo_t *info, void *context)
 	else if (sig == SIGUSR2)
 		c = c & ~(1 << bit);
 	if (bit == 0 && c)
-		if (ft_add_char_vector(&c, vec, 1) == NULL)
+		if (ft_add_char_vector(&c, vec, 1, sizeof(char)) == NULL)
 			return (ft_free_vector(&vec), exit(EXIT_FAILURE));
 	if (bit == 0 && c == 0)
 	{
